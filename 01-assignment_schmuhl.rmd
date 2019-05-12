@@ -42,3 +42,54 @@ sc
 ## What's the average median debt?
 sc%>%summarize(costt4_a=mean(costt4_a,na.rm=TRUE))
 ```
+
+```{r load_data}
+## Load in the data
+load("college.Rdata")
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+```
+
+##Everything below here is practicing the assignment exemplar codes.  Still learning
+
+
+```{r}
+## Just colleges with low admit rates: order by sat scores (- sat_avg gives descending)
+sc%>%filter(adm_rate<.1)%>%select(instnm,adm_rate,sat_avg)%>%
+  arrange(-sat_avg)
+```
+
+```{r}
+## 
+sc%>%filter(adm_rate<.1)%>%summarize(mean_earn=mean(md_earn_wne_p6,na.rm=TRUE))
+```
+```{r}
+## 
+sc%>%filter(sat_avg>1400)%>%summarize(mean_size_highSAT=mean(ugds,na.rm=TRUE))
+
+sc%>%filter(sat_avg<1100)%>%summarize(mean_size_lowSAT=mean(ugds,na.rm=TRUE))
+```
+sc
+```{r}
+## 
+
+sc_nona <- sc[complete.cases(sc),]
+
+
+cost <- (sc_nona%>%select(costt4_a))
+debt <- (sc_nona%>%select(debt_mdn))
+
+# Note: must convert list to vector to use plot here. 
+plot(unlist(cost),unlist(debt))
+
+```
+
+```{r}
+control <- (sc_nona %>%select(control))
+
+plot(unlist(control),unlist(cost), type="p", col = "green")
+points(unlist(control),unlist(debt), type="p", col = "red")
+```
